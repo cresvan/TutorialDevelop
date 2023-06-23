@@ -1,6 +1,7 @@
 package com.sutaruhin.service;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -35,6 +36,23 @@ public class UserService {
 	public User saveUser(User user) {
 		return userRepository.save(user);
 	}
+
+
+	/*deleteUser メソッドでは、引数として渡された主キーのSet idck（画面で選択した削除対象UserのIDすべて）をfor文で1件ずつ取り出し、
+	 * JpaRepositoryインターフェイスの定義済みメソッドdeleteByIdで削除を行なっています。*/
+	@Transactional
+	public void deleteUser(Set<Integer> idck) {
+		for(Integer id : idck) {
+			userRepository.deleteById(id);
+		}
+	}
+
+	/*今回は、後で別のテーブルと結合して処理を行うため、for文で1件ずつ削除する方法にしていますが、
+	 * JpaRepository インターフェイスの定義済みメソッド deleteAllInBatch を使うと一括削除も可能です。その場合の記述内容は以下になります。
+
+	public void deleteUser(Set idck) {
+	    userRepository.deleteAllInBatch(userRepository.findAllById(idck));
+	}	*/
 
 
 }
