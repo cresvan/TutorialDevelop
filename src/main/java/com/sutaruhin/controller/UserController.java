@@ -64,14 +64,21 @@ public class UserController {
 	@GetMapping("/update/{id}")
 	public String getUser(@PathVariable("id") Integer id, Model model) {
 
-		model.addAttribute("user", service.getUser(id));
+		if( id != null) {
+			model.addAttribute("user", service.getUser(id));
+		}
+
 
 		return "user/update";
 	}
 
 
 	@PostMapping("/update/{id}")
-	public String postUser(User user) {
+	public String postUser(@Validated User user, BindingResult res, Model model) {
+		if(res.hasErrors()) {
+
+			return getUser(null, model);
+		}
 
 		service.saveUser(user);
 

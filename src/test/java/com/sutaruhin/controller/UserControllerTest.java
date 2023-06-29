@@ -7,6 +7,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -61,6 +63,29 @@ class UserControllerTest {
 		assertEquals(user.getName(), "スタルヒン太郎");
 	}
 
+	//課題
+	@Test
+	@DisplayName("ユーザ一覧画面")
+	@WithMockUser
+	void testGetList() throws Exception {
+		MvcResult result = mockMvc.perform(get("/user/list"))
+			.andExpect(status().isOk())
+			.andExpect(model().attributeExists("userlist"))
+			.andExpect(model().hasNoErrors())
+			.andExpect(view().name("user/list"))
+			.andReturn();
+
+		List<User> userlist = (List<User>)result.getModelAndView().getModel().get("userlist");
+
+		assertEquals(userlist.size(), 3);
+		assertEquals(userlist.get(0).getId(), 1);
+		assertEquals(userlist.get(1).getId(), 2);
+		assertEquals(userlist.get(2).getId(), 3);
+		assertEquals(userlist.get(0).getName(), "スタルヒン太郎");
+		assertEquals(userlist.get(1).getName(), "スタルヒン次郎");
+		assertEquals(userlist.get(2).getName(), "スタルヒン花子");
+
+	}
 }
 
 /*テストではモックを多く使います。モックは「原寸大の模型」という意味で、機能やクラスを擬似的に再現したものです。
