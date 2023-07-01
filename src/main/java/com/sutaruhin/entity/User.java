@@ -50,12 +50,14 @@ public class User {
 
 	@Min(0)
 	@Max(120)
+	@NotNull(message = "年齢が空欄になっています。")
 	private Integer age;
 
 
 	@Column(length = 50)
 	@Email
 	@Length(max=50)
+	@NotEmpty(message = "メールアドレスが空欄になっています。")
 	private String email;
 
 
